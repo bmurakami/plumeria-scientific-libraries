@@ -27,7 +27,7 @@ jobs:
         with:
           name: plumeria-libraries-darwin-m1
           path: spack-environments/darwin-m1/.spack-env/view/
-          retention-days: 365
+          retention-days: 90
       
   # build-linux-x64:
   #   runs-on: ubuntu-latest
