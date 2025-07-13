@@ -1,0 +1,13 @@
+spack:
+  specs:
+  - openblas@0.3.27 shared=false
+
+  packages:
+    all:
+      target: [aarch64]
+      
+  concretizer:
+    unify: when_possible
+    reuse: false
+
+  view: true
