@@ -12,20 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Configure Spack
+      - name: Spack installations
         run: |
-          pwd
-          ls -la
-          brew install gcc
           which gfortran
           git clone --depth=1 https://github.com/spack/spack.git
           . spack/share/spack/setup-env.sh
           echo "$(pwd)/spack/bin" >> $GITHUB_PATH
           spack compiler find
-      
-      - name: Build Libraries
-        run: |
-          spack env activate --dir .
+          spack env activate --dir spack-environments/darwin-m1
           spack install
       
       # - name: Collect Artifacts
