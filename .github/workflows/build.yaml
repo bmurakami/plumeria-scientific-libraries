@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-darwin-m1:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
       
@@ -28,61 +28,24 @@ jobs:
           name: plumeria-libraries-darwin-m1
           path: spack-environments/darwin-m1/.spack-env/view/
           retention-days: 90
-      
-  # build-linux-x64:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-      
-  #     - name: Setup Spack
-  #       run: |
-  #         git clone --depth=1 https://github.com/spack/spack.git
-  #         . spack/share/spack/setup-env.sh
-  #         echo "$(pwd)/spack/bin" >> $GITHUB_PATH
-      
-  #     - name: Configure Compilers
-  #       run: spack compiler find
-      
-  #     - name: Build Libraries
-  #       run: |
-  #         spack env activate --dir .
-  #         spack install
-      
-  #     - name: Collect Artifacts
-  #       run: |
-  #         mkdir -p artifacts/linux-x64
-  #         find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/linux-x64/ \;
-      
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: linux-x64-static-libs
-  #         path: artifacts/linux-x64/
 
-  # build-linux-arm64:
-  #   runs-on: ubuntu-24.04-arm64
-  #   steps:
-  #     - uses: actions/checkout@v4
+  build-linux-aarch64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
       
-  #     - name: Setup Spack
-  #       run: |
-  #         git clone --depth=1 https://github.com/spack/spack.git
-  #         . spack/share/spack/setup-env.sh
-  #         echo "$(pwd)/spack/bin" >> $GITHUB_PATH
+      - name: Spack installations
+        run: |
+          git clone --depth=1 https://github.com/spack/spack.git
+          . spack/share/spack/setup-env.sh
+          echo "$(pwd)/spack/bin" >> $GITHUB_PATH
+          spack compiler find
+          spack env activate --dir spack-environments/linux-aarch64
+          spack install
       
-  #     - name: Configure Compilers
-  #       run: spack compiler find
-      
-  #     - name: Build Libraries
-  #       run: |
-  #         spack env activate --dir .
-  #         spack install
-      
-  #     - name: Collect Artifacts
-  #       run: |
-  #         mkdir -p artifacts/linux-arm64
-  #         find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/linux-arm64/ \;
-      
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: linux-arm64-static-libs
-  #         path: artifacts/linux-arm64/
+      - name: Upload Spack build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plumeria-libraries-linux-aarch64
+          path: spack-environments/linux-aarch64/.spack-env/view/
+          retention-days: 90
