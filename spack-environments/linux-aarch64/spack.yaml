@@ -1,0 +1,9 @@
+spack:
+  specs:
+  - openblas@0.3.27 shared=false
+
+  concretizer:
+    unify: when_possible
+    reuse: false
+
+  view: true
