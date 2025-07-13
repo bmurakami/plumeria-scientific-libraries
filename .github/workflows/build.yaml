@@ -17,7 +17,6 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/spack/spack.git
           . spack/share/spack/setup-env.sh
-          echo "$(pwd)/spack/bin" >> $GITHUB_PATH
           spack compiler find
           spack env activate --dir spack-environments/darwin-m1
           spack install
@@ -38,7 +37,6 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/spack/spack.git
           . spack/share/spack/setup-env.sh
-          echo "$(pwd)/spack/bin" >> $GITHUB_PATH
           spack compiler find
           spack env activate --dir spack-environments/linux-aarch64
           spack install
