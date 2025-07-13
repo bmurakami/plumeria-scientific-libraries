@@ -1,0 +1,18 @@
+spack:
+  specs:
+  - openblas@0.3.27 shared=false build_system=cmake
+
+  toolchains:
+    clang_fortran:
+    - spec: '%c=apple-clang'
+      when: '%c'
+    - spec: '%cxx=apple-clang'
+      when: '%cxx'
+    - spec: '%fortran=gcc'
+      when: '%fortran'
+
+  concretizer:
+    unify: when_possible
+    reuse: false
+
+  view: true

@@ -1,0 +1,97 @@
+name: Plumeria Scientific Libraries Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Configure Spack
+        run: |
+          pwd
+          ls -la
+          brew install gcc
+          which gfortran
+          git clone --depth=1 https://github.com/spack/spack.git
+          . spack/share/spack/setup-env.sh
+          echo "$(pwd)/spack/bin" >> $GITHUB_PATH
+          spack compiler find
+      
+      - name: Build Libraries
+        run: |
+          spack env activate --dir .
+          spack install
+      
+      # - name: Collect Artifacts
+      #   run: |
+      #     mkdir -p artifacts/macos
+      #     find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/macos/ \;
+      
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: macos-static-libs
+      #     path: artifacts/macos/
+
+  # build-linux-x64:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+      
+  #     - name: Setup Spack
+  #       run: |
+  #         git clone --depth=1 https://github.com/spack/spack.git
+  #         . spack/share/spack/setup-env.sh
+  #         echo "$(pwd)/spack/bin" >> $GITHUB_PATH
+      
+  #     - name: Configure Compilers
+  #       run: spack compiler find
+      
+  #     - name: Build Libraries
+  #       run: |
+  #         spack env activate --dir .
+  #         spack install
+      
+  #     - name: Collect Artifacts
+  #       run: |
+  #         mkdir -p artifacts/linux-x64
+  #         find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/linux-x64/ \;
+      
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: linux-x64-static-libs
+  #         path: artifacts/linux-x64/
+
+  # build-linux-arm64:
+  #   runs-on: ubuntu-24.04-arm64
+  #   steps:
+  #     - uses: actions/checkout@v4
+      
+  #     - name: Setup Spack
+  #       run: |
+  #         git clone --depth=1 https://github.com/spack/spack.git
+  #         . spack/share/spack/setup-env.sh
+  #         echo "$(pwd)/spack/bin" >> $GITHUB_PATH
+      
+  #     - name: Configure Compilers
+  #       run: spack compiler find
+      
+  #     - name: Build Libraries
+  #       run: |
+  #         spack env activate --dir .
+  #         spack install
+      
+  #     - name: Collect Artifacts
+  #       run: |
+  #         mkdir -p artifacts/linux-arm64
+  #         find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/linux-arm64/ \;
+      
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: linux-arm64-static-libs
+  #         path: artifacts/linux-arm64/
