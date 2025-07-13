@@ -7,14 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build-macos:
+  build-darwin-m1:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       
       - name: Spack installations
         run: |
-          which gfortran
           git clone --depth=1 https://github.com/spack/spack.git
           . spack/share/spack/setup-env.sh
           echo "$(pwd)/spack/bin" >> $GITHUB_PATH
