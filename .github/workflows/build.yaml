@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-darwin-m1:
@@ -21,16 +22,13 @@ jobs:
           spack env activate --dir spack-environments/darwin-m1
           spack install
       
-      # - name: Collect Artifacts
-      #   run: |
-      #     mkdir -p artifacts/macos
-      #     find $(spack location -i -e .) -name "*.a" -exec cp {} artifacts/macos/ \;
+      - name: Upload Spack build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plumeria-libraries-darwin-m1
+          path: spack-environments/darwin-m1/.spack-env/view/
+          retention-days: 365
       
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: macos-static-libs
-      #     path: artifacts/macos/
-
   # build-linux-x64:
   #   runs-on: ubuntu-latest
   #   steps:
