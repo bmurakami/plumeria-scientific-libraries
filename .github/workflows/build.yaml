@@ -47,3 +47,23 @@ jobs:
           name: plumeria-libraries-linux-aarch64
           path: spack-environments/linux-aarch64/.spack-env/view/
           retention-days: 90
+
+  build-linux-neoverse_v2:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Spack installations
+        run: |
+          git clone --depth=1 https://github.com/spack/spack.git
+          . spack/share/spack/setup-env.sh
+          spack compiler find
+          spack env activate --dir spack-environments/linux-neoverse_v2
+          spack install
+      
+      - name: Upload Spack build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plumeria-libraries-linux-neoverse_v2
+          path: spack-environments/linux-neoverse_v2/.spack-env/view/
+          retention-days: 90
