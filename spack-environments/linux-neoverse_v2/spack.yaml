@@ -1,6 +1,6 @@
 spack:
   specs:
-  - openblas shared=false
+  - openblas@0.3.29 shared=false
 
   packages:
     all:
