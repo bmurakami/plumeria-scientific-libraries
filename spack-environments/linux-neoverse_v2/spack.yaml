@@ -1,6 +1,6 @@
 spack:
   specs:
-  - openblas@0.3.27 shared=false
+  - openblas@0.3.27 shared=false threads=openmp
 
   packages:
     all:
