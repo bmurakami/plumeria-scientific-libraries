@@ -59,6 +59,7 @@ jobs:
           . spack/share/spack/setup-env.sh
           spack compiler find
           spack env activate --dir spack-environments/linux-neoverse_v2
+          spack concretize
           spack install
       
       - name: Upload Spack build artifacts
