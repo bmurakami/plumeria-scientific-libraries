@@ -23,10 +23,10 @@ jobs:
       - name: Create archive packages
         run: |
           cd artifacts
-          tar -czf pluscilib-darwin-m1.tar.gz -C darwin-m1 .
-          tar -czf pluscilib-linux-aarch64.tar.gz -C linux-aarch64 .
-          tar -czf pluscilib-linux-neoverse_v2.tar.gz -C linux-neoverse_v2 .
-          tar -czf pluscilib-linux-x86_64.tar.gz -C linux-x86_64 .
+          tar -czf pluscilib-darwin-m1.tar.gz -C pluscilib-darwin-m1 .
+          tar -czf pluscilib-linux-aarch64.tar.gz -C pluscilib-linux-aarch64 .
+          tar -czf pluscilib-linux-neoverse_v2.tar.gz -C pluscilib-linux-neoverse_v2 .
+          tar -czf pluscilib-linux-x86_64.tar.gz -C pluscilib-linux-x86_64 .
           
       - name: Create Release
         uses: softprops/action-gh-release@v1
