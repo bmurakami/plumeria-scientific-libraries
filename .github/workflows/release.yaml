@@ -1,21 +1,43 @@
-name: Plumeria Scientific Libraries
+name: Release
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+    branches: [main]
+
+env:
+  VERSION: "0.1"
 
 jobs:
   release:
     runs-on: ubuntu-24.04
+    if: github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      
+      - name: Create new tag
+        id: create-tag
+        run: |
+          TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+          TAG="${VERSION}-${TIMESTAMP}"
+          
+          git config user.name "Brandon Murakami"
+          git config user.email "bmurakami@berkeley.edu"
+          git tag "$TAG"
+          git push origin "$TAG"
+          
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
       
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
           pattern: pluscilib-*
           path: ./artifacts/
           merge-multiple: false
@@ -31,8 +53,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ steps.create-tag.outputs.tag }}
+          name: Release ${{ steps.create-tag.outputs.tag }}
           draft: false
           prerelease: true
           files: |
