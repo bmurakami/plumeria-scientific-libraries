@@ -1,4 +1,4 @@
-name: Plumeria Scientific Libraries Build
+name: Build
 
 on:
   push:
