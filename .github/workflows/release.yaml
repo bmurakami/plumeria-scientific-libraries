@@ -20,19 +20,16 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
       
-      - name: Create new tag
-        id: create-tag
+      - name: Prepare release tags
+        id: release-tags
         run: |
           TIMESTAMP=$(date +'%Y%m%d%H%M%S')
-          TAG="${VERSION}-${TIMESTAMP}"
-          
-          git config user.name "Brandon Murakami"
-          git config user.email "bmurakami@berkeley.edu"
-          git tag "$TAG"
-          git push origin "$TAG"
-          
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-      
+          TIMESTAMP_TAG="${VERSION}-${TIMESTAMP}"
+          LATEST_TAG="${VERSION}-latest"
+
+          echo "timestamp-tag=$TIMESTAMP_TAG" >> $GITHUB_OUTPUT
+          echo "latest-tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -41,7 +38,7 @@ jobs:
           pattern: pluscilib-*
           path: ./artifacts/
           merge-multiple: false
-          
+
       - name: Create archive packages
         run: |
           cd artifacts
@@ -49,13 +46,37 @@ jobs:
           tar -czf pluscilib-linux-aarch64.tar.gz -C pluscilib-linux-aarch64 .
           tar -czf pluscilib-linux-neoverse_v2.tar.gz -C pluscilib-linux-neoverse_v2 .
           tar -czf pluscilib-linux-x86_64.tar.gz -C pluscilib-linux-x86_64 .
-          
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+
+      - name: Push release tags
+        run: |
+          git config user.name "Brandon Murakami"
+          git config user.email "bmurakami@berkeley.edu"
+
+          git tag "${{ steps.release-tags.outputs.timestamp-tag }}"
+          git tag --force "${{ steps.release-tags.outputs.latest-tag }}"
+          git push origin "${{ steps.release-tags.outputs.timestamp-tag }}"
+          git push --force origin "${{ steps.release-tags.outputs.latest-tag }}"
+
+      - name: Create timestamped release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.create-tag.outputs.tag }}
-          name: Release ${{ steps.create-tag.outputs.tag }}
+          tag_name: ${{ steps.release-tags.outputs.timestamp-tag }}
+          name: Release ${{ steps.release-tags.outputs.timestamp-tag }}
           draft: false
           prerelease: true
+          fail_on_unmatched_files: true
+          overwrite_files: true
+          files: |
+            artifacts/*.tar.gz
+
+      - name: Create version latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release-tags.outputs.latest-tag }}
+          name: Release ${{ steps.release-tags.outputs.latest-tag }}
+          draft: false
+          prerelease: true
+          fail_on_unmatched_files: true
+          overwrite_files: true
           files: |
             artifacts/*.tar.gz
