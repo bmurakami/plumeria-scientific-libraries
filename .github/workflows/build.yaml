@@ -9,7 +9,7 @@ jobs:
   build-darwin-m1:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Spack installations
         run: |
@@ -20,7 +20,7 @@ jobs:
           spack install
       
       - name: Upload Spack build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pluscilib-darwin-m1
           path: spack-environments/darwin-m1/.spack-env/view/
@@ -29,7 +29,7 @@ jobs:
   build-linux-aarch64:
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Spack installations
         run: |
@@ -40,7 +40,7 @@ jobs:
           spack install
       
       - name: Upload Spack build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pluscilib-linux-aarch64
           path: spack-environments/linux-aarch64/.spack-env/view/
@@ -49,7 +49,7 @@ jobs:
   build-linux-neoverse_v2:
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Spack installations
         run: |
@@ -61,7 +61,7 @@ jobs:
           spack install
       
       - name: Upload Spack build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pluscilib-linux-neoverse_v2
           path: spack-environments/linux-neoverse_v2/.spack-env/view/
@@ -70,7 +70,7 @@ jobs:
   build-linux-x86_64:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Spack installations
         run: |
@@ -82,7 +82,7 @@ jobs:
           spack install
       
       - name: Upload Spack build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pluscilib-linux-x86_64
           path: spack-environments/linux-x86_64/.spack-env/view/
