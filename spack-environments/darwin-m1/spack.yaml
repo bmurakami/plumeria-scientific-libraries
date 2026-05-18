@@ -1,6 +1,6 @@
 spack:
   specs:
-  - openblas@0.3.27 shared=false build_system=cmake
+  - openblas@0.3.33 shared=false build_system=cmake
 
   toolchains:
     clang_fortran:

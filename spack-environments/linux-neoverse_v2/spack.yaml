@@ -1,6 +1,6 @@
 spack:
   specs:
-  - openblas@0.3.29 shared=false
+  - openblas@0.3.33 shared=false
 
   packages:
     all:
@@ -9,5 +9,7 @@ spack:
   concretizer:
     unify: when_possible
     reuse: false
+    targets:
+      host_compatible: false
 
   view: true
