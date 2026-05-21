@@ -1,3 +1,4 @@
 .DS_Store
 .spack-env/
 spack.lock
+AGENTS.md
